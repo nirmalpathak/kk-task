@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  dind-priv:
+    image: docker
+    command: sh -c "docker run --rm --name my_nginx --privileged=true -p 9080:80 nginx"
+    networks:
+      - bridge
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+
+networks:
+  bridge:
+    external: true
+    name: bridge
