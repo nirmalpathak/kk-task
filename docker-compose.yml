@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  aa-docker-ce:
+    build: .
+    image: ubuntu-aa-docker-ce
+  aa-test:
+    image: ubuntu-aa-docker-ce
+    command: sh -c 'aa-status && apparmor_parser -r -W /etc/apparmor.d/docker-nginx && docker run --security-opt "apparmor=docker-nginx" -p 9080:80 -d --name apparmor-nginx nginx bash -c "touch ~/test" && docker logs apparmor-nginx && docker rm apparmor-nginx' 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /sys/kernel/security:/sys/kernel/security
+    privileged: true
